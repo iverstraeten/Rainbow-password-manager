@@ -3,6 +3,7 @@
 import tkinter as tk
 import pyperclip
 from tkinter import ttk, scrolledtext, Menu
+from tkinter import messagebox as mBox
 from pw import genpass
 from random import randint
 
@@ -42,6 +43,13 @@ aLabel.grid(column=1, row=2, sticky="W")
 aLabel2 = ttk.Label(monty, text="Password:")
 aLabel2.grid(column=0, row=2, sticky="W")
 
+# Display a Message Box
+def _msgBox2():
+    mBox.showwarning('Generator', 'Please generate a password first!')
+
+def _msgBox():
+    mBox.showinfo('Rainbowpass', 'This software was developed by Ivan Verstraeten. Please donate Bitcoin to: 1HXSBRgPPjURDYxT9uzMoaCWemQSRs549P')
+
 #Modified Button Click Function
 def Generate():
     pw_len = int(numberChosen.get())
@@ -51,7 +59,10 @@ def Generate():
     aLabel.configure(foreground=fill)
 
 def Copy():
-    pyperclip.copy(Generate.password)
+    try:
+        pyperclip.copy(Generate.password)
+    except AttributeError:
+        _msgBox2()
 
 # Exit GUI cleanly
 def _quit():
@@ -91,6 +102,21 @@ numberChosen.current(0)
 # 
 # 
 # Place cursor into name Entry
+
+# Add a Menu
+menuBar = Menu(win)
+win.config(menu=menuBar)
+
+# Add Menu Items
+fileMenu = Menu(menuBar)
+fileMenu.add_command(label="New")
+fileMenu.add_separator()
+fileMenu.add_command(label="Exit", command=_quit)
+menuBar.add_cascade(label="File", menu=fileMenu)
+
+helpMenu = Menu(menuBar)
+helpMenu.add_command(label="About", command=_msgBox)
+menuBar.add_cascade(label="Help", menu=helpMenu)
 #======================
 # Start GUI
 #======================
