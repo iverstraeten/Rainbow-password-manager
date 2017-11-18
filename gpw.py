@@ -6,11 +6,11 @@ from tkinter import ttk, scrolledtext, Menu
 from pw import genpass
 from random import randint
 
-# Create instance
+# create instance
 win = tk.Tk()   
 win.lift()
 win.attributes("-topmost", 1)
-win.after_idle(win.attributes,'-topmost',False)
+win.after_idle(win.attributes,'-topmost', False)
 
 # Add a title       
 win.title("RainbowPass")
@@ -18,12 +18,29 @@ win.title("RainbowPass")
 # Disable resizing the GUI
 win.resizable(0,0)    
 
-# Modify adding a Label
-aLabel = ttk.Label(win, text="Password")
-aLabel.grid(column=1, row=2, sticky="EW")
+# Tab Control introduced here -----------------------------------------
+tabControl = ttk.Notebook(win)          # Create Tab Control
+
+tab1 = ttk.Frame(tabControl)            # Create a tab
+tabControl.add(tab1, text='Tab 1')      # Add the tab
+tabControl.pack(expand=1, fill="both")  # Pack to make visible
+
+tab2 = ttk.Frame(tabControl)            # Create a tab
+tabControl.add(tab2, text='Tab 2')      # Add the tab
+tabControl.pack(expand=1, fill="both")  # Pack to make visible
+
+
+# ~ Tab Control introduced here -----------------------------------------
+
+monty = ttk.LabelFrame(tab1, text=" monty python ")
+monty.grid(column=0, row=0, padx=8, pady=4)
 
 # Modify adding a Label
-aLabel2 = ttk.Label(win, text="Password:")
+aLabel = ttk.Label(monty, text="Password")
+aLabel.grid(column=0, row=0, sticky="EW")
+
+# Modify adding a Label
+aLabel2 = ttk.Label(monty, text="Password:")
 aLabel2.grid(column=0, row=2, sticky="E")
 
 #Modified Button Click Function
@@ -44,39 +61,35 @@ def _quit():
     exit()
 
 # Adding a Button
-action = ttk.Button(win, text="Generate!", command=Generate)
+action = ttk.Button(monty, text="Generate!", command=Generate)
 action.grid(column=0,row=1)
 
 # Adding another Button
-action = ttk.Button(win, text="copy to clipboard", command=Copy)
+action = ttk.Button(monty, text="copy to clipboard", command=Copy)
 action.grid(column=1,row=1)
 
-ttk.Label(win, text="Password lenght ").grid(column=0, row=0)
+ttk.Label(monty, text="Password lenght ").grid(column=0, row=0)
 
 number = tk.StringVar()
-numberChosen = ttk.Combobox(win, width=12, textvariable=number,
+numberChosen = ttk.Combobox(monty, width=12, textvariable=number,
 state='readonly')
 numbers_pw = [i for i in range(8,19)]
 numberChosen['values'] = (numbers_pw)
 numberChosen.grid(column=1, row=0)
 numberChosen.current(0)
 
-# Create a Menu Bar
-menuBar = Menu(win)
-win.config(menu=menuBar)
 
-# Create Menu Items
-fileMenu = Menu(menuBar)
-fileMenu.add_command(label="New")
-fileMenu.add_separator()
-fileMenu.add_command(label="Exit", command=_quit)
-menuBar.add_cascade(label="File", menu=fileMenu)
+# create a container to hold labels
+labelsFrame = ttk.LabelFrame(monty, text=" Labels in a frame ")
+labelsFrame.grid(column=0, row=7)
 
+ttk.Label(labelsFrame, text="label1").grid(column=0, row=0)
+ttk.Label(labelsFrame, text="label2").grid(column=0, row=1)
+ttk.Label(labelsFrame, text="label2").grid(column=0, row=2)
 
-# Create Menu Items
-helpMenu = Menu( menuBar)
-helpMenu.add_command(label="About")
-menuBar.add_cascade(label="Help", menu=helpMenu)
+for child in labelsFrame.winfo_children():
+    child.grid_configure(padx=8,pady=1)
+
 
 # Place cursor into name Entry
 #======================
